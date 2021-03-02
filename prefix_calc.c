@@ -10,7 +10,8 @@
 
 char operators[4] = {'-', '+', '*', '/'};
 
-typedef struct Expr {
+typedef struct Expr
+{
     char operator;
     int value;
 } Expr;
@@ -22,23 +23,6 @@ void main()
     gets(input);
     GetExpression(input);
 }
-
-// Определяет, является ли знак оператором +, *, /, -
-bool IsOperator(char c)
-{
-    int i;
-
-    for (i = 0; i <= 4; i++)
-    {
-        if (c == operators[i])
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 
 // Принимает оператор и члены алгебраического выражения
 int Calculate(int first_member, int second_member, char operator)
@@ -67,22 +51,23 @@ void GetExpression(char *input)
 
     for (i = 0; i < inputLength; i++)
     {
-        if (input[i] == '(') {
+        if (input[i] == '(')
+        {
             i++;
             char tmp = input[i];
             char *tmp_string;
             int k = 0;
-            while (tmp != '(' || tmp != ')') {
+            while (tmp != '(' || tmp != ')')
+            {
                 push_tmp(tmp, tmp_string, k);
                 k++;
                 i++;
                 tmp = input[i];
             }
             Expr object;
-            sscanf(tmp_string, "%s %d", &object.operator, &object.value);
+            sscanf(tmp_string, "%s %d", &object.operator, & object.value);
             push_operations(object, operations, top_of_stack);
             top_of_stack++;
-
         }
     }
     printf(operations);
@@ -102,7 +87,7 @@ void push_operations(Expr data, Expr *stack, int index)
     stack[index] = data;
 }
 
-void push_tmp(char* data, char *stack, int index)
+void push_tmp(char *data, char *stack, int index)
 {
     stack[index] = data;
 }
