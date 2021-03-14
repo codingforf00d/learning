@@ -8,19 +8,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-char operators[4] = {'-', '+', '*', '/'};
-
 typedef struct Expr
 {
     char operator;
     int value;
 } Expr;
 
-void main()
+int main()
 {
-    char input[1000];
-    printf('write ur expression');
-    gets(input);
+    char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
+    printf("write ur expression");
     GetExpression(input);
 }
 
@@ -54,8 +51,8 @@ void GetExpression(char *input)
         if (input[i] == '(')
         {
             i++;
-            char tmp = input[i];
-            char *tmp_string;
+            int tmp = input[i];
+            int tmp_string[100];
             int k = 0;
             while (tmp != '(' || tmp != ')')
             {
@@ -65,7 +62,7 @@ void GetExpression(char *input)
                 tmp = input[i];
             }
             Expr object;
-            sscanf(tmp_string, "%s %d", &object.operator, & object.value);
+            sscanf(tmp_string, "%s %d", &object.operator, &object.value);
             push_operations(object, operations, top_of_stack);
             top_of_stack++;
         }
