@@ -17,7 +17,7 @@ typedef struct Expr
 int main()
 {
     char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
-    printf("write ur expression");
+    // printf("write ur expression");
     GetExpression(input);
 }
 
@@ -44,30 +44,25 @@ void GetExpression(char *input)
     Expr operations[100];
     int top_of_stack = 0;
 
-    int inputLength = sizeof(input) / sizeof(char);
-
+    int inputLength = strlen(input);
+    char tmp_string[100];
+    int tmp_index = 0;
+    Expr object;
+    int k;
+    int previous_bracket_index;
     for (i = 0; i < inputLength; i++)
     {
-        if (input[i] == '(')
-        {
-            i++;
-            int tmp = input[i];
-            int tmp_string[100];
-            int k = 0;
-            while (tmp != '(' || tmp != ')')
-            {
-                push_tmp(tmp, tmp_string, k);
-                k++;
-                i++;
-                tmp = input[i];
+        if (input[i] == '(' || input[i] == ')'){
+            if (i > 0) {
+               for (k = previous_bracket_index+1; k < i; k++){
+                    push_tmp(input[k], tmp_string, tmp_index);
+                    tmp_index++;
+               } 
             }
-            Expr object;
-            sscanf(tmp_string, "%s %d", &object.operator, &object.value);
-            push_operations(object, operations, top_of_stack);
-            top_of_stack++;
+            previous_bracket_index = i;
         }
     }
-    printf(operations);
+    printf("%s", tmp_string);
 }
 
 // достать верхний элемент стека
@@ -84,7 +79,7 @@ void push_operations(Expr data, Expr *stack, int index)
     stack[index] = data;
 }
 
-void push_tmp(char *data, char *stack, int index)
+void push_tmp(int data, char *stack, int index)
 {
     stack[index] = data;
 }
