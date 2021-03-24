@@ -40,16 +40,13 @@ int Calculate(int first_member, int second_member, char operator)
 // Метод, преобразующий входную строку с выражением в стек с операторами и значениями
 void GetExpression(char *input)
 {
-    int i;
     Expr operations[100];
-    int top_of_stack = 0;
-
-    int inputLength = strlen(input);
-    char tmp_string[100];
-    int tmp_index = 0;
     Expr object;
-    int k;
-    int previous_bracket_index;
+    int top_of_stack = 0;
+    int inputLength = strlen(input);
+    int tmp_index = 0;
+    int previous_bracket_index, i, k;
+    char tmp_string[100];
     for (i = 0; i < inputLength; i++)
     {
         if (input[i] == '(' || input[i] == ')'){
