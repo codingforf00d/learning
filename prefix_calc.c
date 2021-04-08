@@ -64,8 +64,3 @@ void push_operations(Expr data, Expr *stack, int index)
 {
     stack[index] = data;
 }
-
-void push_tmp(int data, char *stack, int index)
-{
-    stack[index] = data;
-}
