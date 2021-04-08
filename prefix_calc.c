@@ -18,11 +18,12 @@ int main()
 {
     char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
     // printf("write ur expression");
-    GetExpression(input);
+    Expr *ops = GetOperations(input);
+    GetLastNumber(input);
 }
 
 // Метод, преобразующий входную строку с выражением в стек с операторами и значениями
-void GetExpression(char *input)
+int GetOperations(char *input)
 {   
     Expr operations[100];
     int top_of_stack = 0;
@@ -33,10 +34,28 @@ void GetExpression(char *input)
         if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
             Expr object;
             sscanf(input+i, "%s %d", &object.operator, &object.value);
-            printf("operator: %s\nvalue: %d\n---------\n", &object.operator, &object.value);
+            push_operations(object, operations, top_of_stack);
+            top_of_stack++;
         }
     }
+    return operations;
 
+}
+
+int GetLastNumber(char *input){
+    int i, j, k, bracket_index, number;
+    int inputLength = strlen(input);
+    for (i=0; i<inputLength; i++){
+
+        if (input[i] == '('){
+            bracket_index = i;
+        }
+        
+        if (input[i] == ')'){
+            sscanf(input+bracket_index+1, "%s %d %d", &j, &k, &number);
+            return number;
+        }
+    }
 }
 
 // добавить элемент в стек
