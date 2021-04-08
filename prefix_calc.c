@@ -14,18 +14,11 @@ typedef struct Expr
     int value;
 } Expr;
 
-int main()
-{
-    char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
-    // printf("write ur expression");
-    Expr *ops = GetOperations(input);
-    GetLastNumber(input);
-}
 
 // Метод, преобразующий входную строку с выражением в стек с операторами и значениями
-int GetOperations(char *input)
+Expr *GetOperations(char *input)
 {   
-    Expr operations[100];
+    static Expr operations[100];
     int top_of_stack = 0;
     int inputLength = strlen(input);
     int i;
@@ -59,8 +52,46 @@ int GetLastNumber(char *input){
     }
 }
 
+
+int Reduce(Expr *operations, int last_number){
+    char a;
+    int b;
+    a = operations[0].operator;
+    b = operations[0].value;
+    printf("OPERATOR: %s\nVALUE: %d\n-----------\n", &a, &b);
+}
+
+
 // добавить элемент в стек
 void push_operations(Expr data, Expr *stack, int index)
 {
     stack[index] = data;
+}
+
+int Calculate(char operator, int num1, int num2){
+    int result = 0;
+      	switch(operator)
+  	{
+  		case '+':
+  			result = num1 + num2;
+  			break;
+  		case '-':
+  			result = num1 - num2;
+  			break;  			
+  		case '*':
+  			result = num1 * num2;
+  			break;
+  		case '/':
+  			result = num1 / num2;
+  			break;
+		default:
+			printf("\n You have enetered an Invalid Operator ");				    			
+	}
+    return result;
+}
+
+int main()
+{
+    char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
+    Reduce(GetOperations(input), GetLastNumber(input));
 }
