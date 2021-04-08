@@ -32,9 +32,9 @@ int GetOperations(char *input)
     for (i=0; i<inputLength; i++){
 
         if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
-            Expr object;
-            sscanf(input+i, "%s %d", &object.operator, &object.value);
-            push_operations(object, operations, top_of_stack);
+            Expr operation;
+            sscanf(input+i, "%s %d", &operation.operator, &operation.value);
+            push_operations(operation, operations, top_of_stack);
             top_of_stack++;
         }
     }
