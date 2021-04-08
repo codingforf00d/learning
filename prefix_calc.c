@@ -42,6 +42,7 @@ int GetOperations(char *input)
 
 }
 
+// Получить последнее число стека, которое положим в дефолтное значение для редьюсера
 int GetLastNumber(char *input){
     int i, j, k, bracket_index, number;
     int inputLength = strlen(input);
