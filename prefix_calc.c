@@ -54,11 +54,7 @@ int GetLastNumber(char *input){
 
 
 int Reduce(Expr *operations, int last_number){
-    char a;
-    int b;
-    a = operations[0].operator;
-    b = operations[0].value;
-    printf("OPERATOR: %s\nVALUE: %d\n-----------\n", &a, &b);
+    
 }
 
 
@@ -67,6 +63,7 @@ void push_operations(Expr data, Expr *stack, int index)
 {
     stack[index] = data;
 }
+
 
 int Calculate(char operator, int num1, int num2){
     int result = 0;
