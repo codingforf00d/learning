@@ -1,71 +1,57 @@
-// Написать префиксный калькулятор (- 10 (/ 8 (* 2 (+ 2 2)))
+// Написать префиксный калькулятор (- 10 (/ 8 (* 2 (+ 2 2))), (+ 2 2 (* 3 1) 4 5 (- 6 3)), (+ (- 4 2) (* 2 2 (+ 1 1)) 3 (/ 8 2))
 // На вход дается строка, состоящая из +, -, *, /, числа и корректных скобок. На выходе - результат операции.
-// [+, 101, -, 545, *, 234, /, 29] - итоговый стек для редьюсера, -1 элемент всегда число, -2 всегда оператор, и т.д.
-// [{+, 101}, {-, 545}, {*, 234}] - еще один вариант итогового стека
 #include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Expr
-{
-    char operator;
-    int value;
-} Expr;
-
-
-// Метод, преобразующий входную строку с выражением в стек с операторами и значениями
-Expr *GetOperations(char *input)
-{   
-    static Expr operations[100];
-    int top_of_stack = 0;
-    int inputLength = strlen(input);
+typedef struct Ret {
+    int bracket;
     int i;
-    for (i=0; i<inputLength; i++){
+    int k;
+} Ret;
 
-        if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
-            Expr operation;
-            sscanf(input+i, "%s %d", &operation.operator, &operation.value);
-            push_operations(operation, operations, top_of_stack);
-            top_of_stack++;
-        }
-    }
-    return operations;
 
-}
-
-// Получить последнее число стека, которое положим в дефолтное значение для редьюсера
-int GetLastNumber(char *input){
-    int i, j, k, bracket_index, number;
+// Метод обхода дерева снизу
+Ret reduceTree(char *input, Ret obj)
+{   
     int inputLength = strlen(input);
-    for (i=0; i<inputLength; i++){
+    int firstBracket = 0;
+    int i = obj.i;
+    int k = obj.k;
+    int bracket = obj.bracket;
 
-        if (input[i] == '('){
-            bracket_index = i;
+    for (i=0;i<inputLength;i++) {
+        if (input[i] == '(' && i != 0){
+            firstBracket = i;
+            continue;
         }
-        
-        if (input[i] == ')'){
-            sscanf(input+bracket_index+1, "%s %d %d", &j, &k, &number);
-            return number;
-        }
+
     }
-}
-
-
-int Reduce(Expr *operations, int last_number){
     
 }
 
-
-// добавить элемент в стек
-void push_operations(Expr data, Expr *stack, int index)
-{
-    stack[index] = data;
+int findDeepestBracket(char *input, int length){
+    int a, b, deepest;
+    int openedCount = 0;
+    int maxOpened = 0;
+    for (a=0;a<length;a++){
+        if (input[a] == '('){
+            openedCount++;
+            if (openedCount > maxOpened){
+                maxOpened=openedCount;
+                deepest=a;
+            }   
+        }
+        if (input[a] == ')'){
+            openedCount--;
+        }
+    }
+    return deepest;
 }
 
-
-int Calculate(char operator, int num1, int num2){
+int calculate(char operator, int num1, int num2){
     int result = 0;
       	switch(operator)
   	{
@@ -89,6 +75,13 @@ int Calculate(char operator, int num1, int num2){
 
 int main()
 {
-    char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
-    Reduce(GetOperations(input), GetLastNumber(input));
+    char *input = "(+ 2 2)";
+    char operator;
+    Ret initObj;
+    initObj.bracket = 0;
+    initObj.i = 0;
+    initObj.k = 0;
+    int deepest = findDeepestBracket(input, strlen(input));
+    printf("DEEPEST IS: %d", &deepest);
+    
 }
