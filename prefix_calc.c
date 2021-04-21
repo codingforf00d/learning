@@ -6,30 +6,18 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Ret {
-    int bracket;
-    int i;
-    int k;
-} Ret;
-
-
 // Метод обхода дерева снизу
-Ret reduceTree(char *input, Ret obj)
+int reduceTree(char *input, int i, int k, int bracket)
 {   
     int inputLength = strlen(input);
     int firstBracket = 0;
-    int i = obj.i;
-    int k = obj.k;
-    int bracket = obj.bracket;
 
     for (i=0;i<inputLength;i++) {
         if (input[i] == '(' && i != 0){
             firstBracket = i;
             continue;
         }
-
     }
-    
 }
 
 int findDeepestBracket(char *input, int length){
@@ -49,6 +37,23 @@ int findDeepestBracket(char *input, int length){
         }
     }
     return deepest;
+}
+
+int findPairBracket(char *input, int length){
+    int a;
+    int b=0;
+    for (a=0;a<length;a++){
+        if (input[a] == '('){
+            b++;
+        }
+        else if (input[a] == ')'){
+            b--;
+        }
+        else if (b == 0){
+            return a;
+        }  
+    }
+
 }
 
 int calculate(char operator, int num1, int num2){
@@ -75,13 +80,9 @@ int calculate(char operator, int num1, int num2){
 
 int main()
 {
-    char *input = "(+ 2 2)";
-    char operator;
-    Ret initObj;
-    initObj.bracket = 0;
-    initObj.i = 0;
-    initObj.k = 0;
-    int deepest = findDeepestBracket(input, strlen(input));
-    printf("DEEPEST IS: %d", &deepest);
+    char *input = "(+ (- 4 2) (* 2 2 (+ 1 1)) 3 (/ 8 2))";
+    int length = strlen(input);
+    int pairIndex = findPairBracket(input+3, length);
+    printf("RESULT IS: %s", &input[9]);
     
 }
