@@ -56,33 +56,51 @@ int findPairBracket(char *input, int length){
 
 }
 
+int parseToken(char *input, int length){
+    int i;
+    int value=0;
+    int result=0;
+    char operator;
+    for (i=0;i<length;i++){
+        if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
+            operator = input[i];
+        }
+        else if (input[i] == ')'){
+            continue;
+        }
+        else if (isdigit(input[i])){
+            value = value*10 + input[i];
+        }
+        else if (input[i] == ' '){
+            calculate(operator, result, value);
+        }
+    }
+    return result;
+}
+
 int calculate(char operator, int num1, int num2){
-    int result = 0;
-      	switch(operator)
+    switch(operator)
   	{
   		case '+':
-  			result = num1 + num2;
-  			break;
+  			return num1 + num2;
   		case '-':
-  			result = num1 - num2;
-  			break;  			
+  			return num1 - num2;			
   		case '*':
-  			result = num1 * num2;
-  			break;
+  			return num1 * num2;
   		case '/':
-  			result = num1 / num2;
-  			break;
+  			return  num1 / num2;
 		default:
-			printf("\n You have enetered an Invalid Operator ");				    			
+			printf("\n You have enetered an Invalid Operator ");		    			
 	}
-    return result;
+    return 0;
 }
 
 int main()
 {
-    char *input = "(+ (- 4 2) (* 2 2 (+ 1 1)) 3 (/ 8 2))";
+    char *input = "(+ 234 123)";
     int length = strlen(input);
-    int pairIndex = findPairBracket(input+3, length);
-    printf("RESULT IS: %s", &input[9]);
+    // int result = parseToken(input, length);
+    int result = calculate('+', 1, 2);
+    printf("RESULT IS: %d", &result);
     
 }
