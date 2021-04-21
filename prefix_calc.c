@@ -56,28 +56,6 @@ int findPairBracket(char *input, int length){
 
 }
 
-int parseToken(char *input, int length){
-    int i;
-    int value=0;
-    int result=0;
-    char operator;
-    for (i=0;i<length;i++){
-        if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
-            operator = input[i];
-        }
-        else if (input[i] == ')'){
-            continue;
-        }
-        else if (isdigit(input[i])){
-            value = value*10 + input[i];
-        }
-        else if (input[i] == ' '){
-            calculate(operator, result, value);
-        }
-    }
-    return result;
-}
-
 int calculate(char operator, int num1, int num2){
     switch(operator)
   	{
@@ -95,12 +73,44 @@ int calculate(char operator, int num1, int num2){
     return 0;
 }
 
+int parseToken(char *input, int length){
+    int i;
+    int value=0;
+    int result=0;
+    int bracket=0;
+    char operator;
+    for (i=0;i<length;i++){
+        if (input[i] == '('){
+            bracket++;
+        }
+        if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
+            operator = input[i];
+        }
+        if (input[i] == ')'){
+            bracket--;
+            if (bracket == 0){
+                result = calculate(operator, result, value);
+                return result;
+            }
+        }
+        if (isdigit(input[i])){
+            value = value*10 + (input[i] - '0');
+        }
+        if (input[i] == ' '){
+            result = calculate(operator, result, value);
+            value = 0;
+        }
+    }
+    return result;
+}
+
+
+
 int main()
 {
     char *input = "(+ 234 123)";
     int length = strlen(input);
-    // int result = parseToken(input, length);
-    int result = calculate('+', 1, 2);
+    int result = parseToken(input, length);
     printf("RESULT IS: %d", &result);
     
 }
