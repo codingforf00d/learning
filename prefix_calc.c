@@ -80,6 +80,9 @@ int parseToken(char *input, int length){
     int bracket=0;
     char operator;
     for (i=0;i<length;i++){
+        if (bracket > 1){
+            continue;
+        }
         if (input[i] == '('){
             bracket++;
         }
