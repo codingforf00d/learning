@@ -63,44 +63,6 @@ int reduceTree(char *input, int opsStackSize)
     return result;
 }
 
-
-int deepestBracketIndex(char *input, int length){
-    int a, b, deepest;
-    int openedCount = 0;
-    int maxOpened = 0;
-    for (a=0;a<length;a++){
-        if (input[a] == '('){
-            openedCount++;
-            if (openedCount > maxOpened){
-                maxOpened=openedCount;
-                deepest=a;
-            }   
-        }
-        if (input[a] == ')'){
-            openedCount--;
-        }
-    }
-    return deepest;
-}
-
-int findPairBracket(char *input, int length){
-    int a;
-    int b=0;
-    for (a=0;a<length;a++){
-        if (input[a] == '('){
-            b++;
-        }
-        else if (input[a] == ')'){
-            b--;
-        }
-        else if (b == 0){
-            return a;
-        }  
-    }
-
-}
-
-
 int parseToken(char *input, int length){
     int i;
     int value=NULL;
