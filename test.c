@@ -3,9 +3,7 @@
 
 int main() {
     char a[100];
-    int i;
-    for (i = 0; i<5; i++) {
-        a[i] = 'a';
-        printf("%s", a);
-    }
+    a[0] = 'a';
+    a[0] = 'b';
+    int agg= 2;
 }
