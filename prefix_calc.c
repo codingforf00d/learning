@@ -1,4 +1,4 @@
-// Написать префиксный калькулятор (- 10 (/ 8 (* 2 (+ 2 2))) = 9, (+ 2 2 (* 3 1) 4 5 (- 6 3)) = 19, (+ (- 4 2) (* 2 2 (+ 1 1)) 3 (/ 8 2)) = 17
+// Написать префиксный калькулятор (- 10 (/ 8 (* 2 (+ 2 2)))) = 9, (+ 2 2 (* 3 1) 4 5 (- 6 3)) = 19, (+ (- 4 2) (* 2 2 (+ 1 1)) 3 (/ 8 2)) = 17
 // На вход дается строка, состоящая из +, -, *, /, числа и корректных скобок. На выходе - результат операции.
 #include <stdio.h>
 #include <stdbool.h>
@@ -60,6 +60,7 @@ int reduceTree(char *input, int opsStackSize)
             ops[bracket].result = calculate(ops[bracket].op, ops[bracket].result, ops[bracket+1].result);
         }
     }
+    return result;
 }
 
 
@@ -108,6 +109,9 @@ int parseToken(char *input, int length){
     char operator;
     for (i=0;i<length;i++){
         if (bracket > 1 && input[i] != ')'){
+            if (input[i] == '('){
+                bracket++;
+            }
             continue;
         }
         if (input[i] == '('){
@@ -148,7 +152,7 @@ int stackSize(char *input){
 
 int main()
 {
-    char *input = "(- 10 (/ 8 (* 2 (+ 2 2)))";
+    char *input = "(- 10 (/ 8 (* 2 (+ 2 2))))";
     int result = reduceTree(input, stackSize(input));
     int a = 0;
 
