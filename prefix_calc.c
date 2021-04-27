@@ -12,9 +12,15 @@ typedef struct Expr {
 } Expr;
 
 int calculate(char operator, int num1, int num2){
+    /*
+    * Чтобы не получалось деления на ноль, и т.п.
+    */
     if (num2 == NULL){
         return num1;
     }
+    /*
+    * Чтобы положительные числа не становились отрицательными
+    */
     else if (num1 == NULL){
         return num2;
     }
