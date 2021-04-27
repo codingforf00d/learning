@@ -6,6 +6,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+typedef struct Expr {
+    char op;
+    int result;
+} Expr;
+
 int calculate(char operator, int num1, int num2){
     if (num2 == NULL){
         return num1;
@@ -29,82 +34,11 @@ int calculate(char operator, int num1, int num2){
     return 0;
 }
 
-
-typedef struct Expr {
-    char op;
-    int result;
-} Expr;
-
-// Метод обхода дерева
-int reduceTree(char *input, int opsStackSize)
-{   
-    int i;
-    int inputLength = strlen(input);
-    Expr ops[opsStackSize];
-    int bracket = -1;
-    int result = 0;
-    char operator;
-
-    for (i=0;i<inputLength;i++) {
-        if (input[i] == '('){
-            bracket++;
-            ops[bracket].op = input[i+1];
-            ops[bracket].result = parseToken(input+i, inputLength);
-        }
-        if (input[i] == ')'){
-            bracket--;
-            if (bracket == -1){
-                result = ops[0].result;
-                return result;
-            }
-            ops[bracket].result = calculate(ops[bracket].op, ops[bracket].result, ops[bracket+1].result);
-        }
-    }
-    return result;
-}
-
-int parseToken(char *input, int length){
-    int i;
-    int value=NULL;
-    int result=NULL;
-    int bracket=0;
-    char operator;
-    for (i=0;i<length;i++){
-        if (bracket > 1 && input[i] != ')'){
-            if (input[i] == '('){
-                bracket++;
-            }
-            continue;
-        }
-        if (input[i] == '('){
-            bracket++;
-        }
-        if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
-            operator = input[i];
-        }
-        if (input[i] == ')'){
-            bracket--;
-            if (bracket == 0){
-                result = calculate(operator, result, value);
-                return result;
-            }
-        }
-        if (isdigit(input[i])){
-            value = value*10 + (input[i] - '0');
-        }
-        if (input[i] == ' '){
-            result = calculate(operator, result, value);
-            value = NULL;
-        }
-    }
-    return result;
-}
-
-int stackSize(char *input){
+int calculateStackSize(char *input, int inputLength){
+    // вычисляет размер стека, куда будем класть оператор и результат вычисления каждого уровня дерева
     int i;
     int stackSize = 0;
-    int length = strlen(input);
-    for (i=0;i<length;i++){
+    for (i=0;i<inputLength;i++){
         if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
             stackSize++;
         }
@@ -112,11 +46,51 @@ int stackSize(char *input){
     return stackSize;
 }
 
+// Метод обхода дерева
+int reduceTree(char *input, int stackSize, int inputLength)
+{   
+    int i;
+    Expr tree[stackSize];
+    int level = -1;
+    int result = NULL;
+    int value = NULL;
+
+    for (i=0;i<inputLength;i++) {
+        if (input[i] == '('){
+            level++;
+            // чтобы при операторе '-' первое число в токене не стало отрицательным
+            tree[level].result = NULL;
+        }
+        if (input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/'){
+            tree[level].op = input[i];
+        }
+        if (input[i] == ')'){
+            // подсчитываем итоговый результат токена с учетом последнего числа перед закрывающей скобкой
+            tree[level].result = calculate(tree[level].op, tree[level].result, value); 
+            value = NULL;
+            level--;
+            if (level == -1){
+                return tree[0].result;
+            }
+            // подсчитываем результат верхнего уровня, с учетом результата нижнего
+            tree[level].result = calculate(tree[level].op, tree[level].result, tree[level+1].result);
+        }
+        if (isdigit(input[i])){
+            value = value*10 + (input[i] - '0');
+        }
+        if (input[i] == ' '){
+            tree[level].result = calculate(tree[level].op, tree[level].result, value);
+            value = NULL;
+        }
+    }
+    return result;
+}
+
 int main()
 {
-    char *input = "(- 10 (/ 8 (* 2 (+ 2 2))))";
-    int result = reduceTree(input, stackSize(input));
+    char *input = "(+ (- 4 2) (* 2 2 (+ 1 1)) 3 (/ 8 2))";
+    char inputLength = strlen(input);
+    int result = reduceTree(input, calculateStackSize(input, inputLength), inputLength);
     int a = 0;
 
-    
 }
